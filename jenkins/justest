@@ -1,0 +1,53 @@
+just help test
+
+pipeline {
+    stages {
+
+
+        stage('Security Check') {
+            steps {
+                script {
+                    // Run bandit for security checks
+                    sh 'pip install bandit'
+                    sh 'bandit -r .'
+                }
+            }
+        }
+
+        stage('Push') {
+            steps {
+                script {
+                    // Login to Docker Hub
+                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                    }
+
+                    // Push Docker image
+                    sh "docker push ${DOCKER_IMAGE}:${TAG}"
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Run Docker container
+                    sh """
+                        docker run -d -p 5000:5000 --name my_flask_app_container ${DOCKER_IMAGE}:${TAG}
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up Docker containers and images
+            script {
+                sh 'docker container stop my_flask_app_container || true'
+                sh 'docker container rm my_flask_app_container || true'
+                sh 'docker image rm ${DOCKER_IMAGE}:${TAG} || true'
+            }
+        }
+    }
+}

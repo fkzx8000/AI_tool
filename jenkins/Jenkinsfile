@@ -1,0 +1,88 @@
+pipeline {
+    agent any
+  stages {
+    stage('Clone Git') {
+      steps {
+        git([url: 'https://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@github.com/BS-PMC-2024/BS-PMC-2024-Team29.git', branch:'main'])
+      }
+    }
+    stage('Build Docker Image') {
+      steps {
+        script {
+          dockerImage = docker.build("doronsw998/project_w:${env.BUILD_ID}")
+        }
+      }
+    }
+    stage('unit Test 1') {
+      steps {
+        script {
+          dockerImage.inside() {
+            sh 'python -m unit_test'
+          }
+        }
+      }
+    }
+    stage('unit Test 2') {
+      steps {
+        script {
+          dockerImage.inside() {
+            sh 'python -m uTest_End_sprint'
+          }
+        }
+      }
+    }
+    stage('unit Test API') {
+      steps {
+        script {
+          dockerImage.inside() {
+            sh 'python -m api_key_test'
+          }
+        }
+      }
+    }
+    stage('unit Test Sprint 2') {
+      steps {
+        script {
+          dockerImage.inside() {
+            sh 'python -m Sprint_2_unit_test'
+          }
+        }
+      }
+    }
+    stage('unit Test Acton') {
+      steps {
+        script {
+          dockerImage.inside() {
+            sh 'python -m Acton_Marketing_UniTest'
+          }
+        }
+      }
+    }
+    stage('unit Test Sprint 3 and GPT test') {
+      steps {
+        script {
+          dockerImage.inside() {
+            sh 'python -m test_GPTIntegration'
+          }
+        }
+      }
+    }
+    stage('Push Docker Image') {
+      steps {
+        script {
+          docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {  
+            dockerImage.push("${env.BUILD_ID}")
+            dockerImage.push("latest")
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker images') {
+      steps {
+        sh "docker rmi doronsw998/project_w:${env.BUILD_ID}"
+        sh "docker rmi doronsw998/project_w:latest"
+      }
+    }
+  }
+}
+
