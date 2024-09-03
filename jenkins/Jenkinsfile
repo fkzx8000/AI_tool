@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Clone Git') {
       steps {
-        git([url: 'https://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@github.com/BS-PMC-2024/BS-PMC-2024-Team29.git', branch:'main'])
+        git([url: '*****', branch:'main'])
       }
     }
     stage('Build Docker Image') {
