@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between">
+    <!-- Message Sending Area -->
+    <div class="card mb-3" style="width: 48%;">
+        <div class="card-header bg-primary text-white">
+            <h4 class="text-white">{{ 'שלח הודעה' if session['language'] == 'he' else 'Send Message' }}</h4>
+        </div>
+        <div class="card-body">
+            <form id="messageForm" method="post">
+                <div class="form-group">
+                    <label for="receiver_id">{{ 'בחר מקבל הודעה:' if session['language'] == 'he' else 'Select Receiver:' }}</label>
+                    <select class="form-control" id="receiver_id" name="receiver_id" required onchange="loadMessages()">
+                        <option value="" {% if not selected_user %}selected{% endif %}>{{ 'אף אחד' if session['language'] == 'he' else 'No one' }}</option>
+                        {% for user in team_members %}
+                        <option value="{{ user.id }}" {% if selected_user and selected_user.id == user.id %}selected{% endif %}>
+                            {{ user.username }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">{{ 'הודעה:' if session['language'] == 'he' else 'Message:' }}</label>
+                    <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">{{ 'שלח' if session['language'] == 'he' else 'Send' }}</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chat History Area -->
+    <div class="card mb-3" style="width: 48%;">
+        <div class="card-header bg-secondary text-white">
+            <h4 class="text-white" id="chat-header">
+                {% if selected_user %}
+                {{ 'שיחה עם' if session['language'] == 'he' else 'Chat with' }} {{ selected_user.username }}
+                {% else %}
+                {{ 'אנא בחר משתמש כדי להציג את השיחה' if session['language'] == 'he' else 'Please select a user to display the chat' }}
+                {% endif %}
+            </h4>
+            <!-- Toggle Order Button -->
+            <div>
+                <button class="btn btn-secondary" id="toggleOrderButton">{{ 'החלף סדר' if session['language'] == 'he' else 'Toggle Order' }}</button>
+            </div>
+        </div>
+        <div class="card-body" style="height: 300px; overflow-y: auto;"> <!-- Fixed height and scrolling enabled -->
+            <ul class="list-group" id="messageList">
+                {% if selected_user %}
+                {% for message in messages %} <!-- Messages are displayed in the order chosen by the user -->
+                <li class="list-group-item{% if message.sender_id == current_user.id %} text-right{% endif %}">
+                    <strong>{{ message.sender.username }}:</strong> {{ message.message }}
+                </li>
+                {% endfor %}
+                {% else %}
+                <p>{{ 'אין הודעות להצגה. בחר משתמש כדי להתחיל שיחה.' if session['language'] == 'he' else 'No messages to display. Select a user to start a chat.' }}</p>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    let order = 'asc'; // Variable to store the order of messages, default: ascending
+
+    // Function to load messages with the selected user
+    function loadMessages() {
+        let receiverId = $('#receiver_id').val();
+        if (receiverId) {
+            $.get('{{ url_for("load_messages") }}', { receiver_id: receiverId, order: order }, function(data) {
+                $('#messageList').html(data.messages);
+                $('#chat-header').text('{{ "שיחה עם " if session["language"] == "he" else "Chat with " }}' + data.receiver_name);
+
+                // Scroll to the bottom for the latest message
+                var messageList = document.getElementById('messageList');
+                messageList.scrollTop = messageList.scrollHeight;
+            });
+        }
+    }
+
+    // Sending a message via AJAX
+    $('#messageForm').on('submit', function(e) {
+        e.preventDefault();
+        let receiverId = $('#receiver_id').val();
+        let messageText = $('#message').val();
+        if (receiverId && messageText) {
+            $.post('{{ url_for("send_message") }}', {
+                receiver_id: receiverId,
+                message: messageText
+            }, function(data) {
+                $('#messageList').html(data.messages); // Update chat messages after sending
+                $('#message').val('');
+                $('#chat-header').text('{{ "שיחה עם " if session["language"] == "he" else "Chat with " }}' + data.receiver_name);
+
+                // Scroll to the bottom for the latest message
+                var messageList = document.getElementById('messageList');
+                messageList.scrollTop = messageList.scrollHeight;
+            });
+        }
+    });
+
+    // Toggle the order of messages
+    $('#toggleOrderButton').on('click', function(e) {
+        e.preventDefault();
+        order = (order === 'asc') ? 'desc' : 'asc'; // Toggle order
+        loadMessages(); // Reload messages with the new order
+    });
+</script>
+
+{% endblock %}

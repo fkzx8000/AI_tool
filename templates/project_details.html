@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'פרטי הפרויקט' if session['language'] == 'he' else 'Project Details' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{{ project.name }} {{ 'פרטים' if session['language'] == 'he' else 'Details' }}</h1>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">{{ 'מידע על הפרויקט' if session['language'] == 'he' else 'Project Information' }}</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>{{ 'תיאור:' if session['language'] == 'he' else 'Description:' }}</strong> {{ project.description }}</p>
+            <p><strong>{{ 'מוביל צוות:' if session['language'] == 'he' else 'Team Leader:' }}</strong>
+                {% if project.tl_id %}
+                    {{ project.team_members | selectattr("id", "equalto", project.tl_id) | map(attribute="username") | first }}
+                {% else %}
+                    {{ 'אין' if session['language'] == 'he' else 'None' }}
+                {% endif %}
+            </p>
+            <p><strong>{{ 'חברי צוות:' if session['language'] == 'he' else 'Team Members:' }}</strong></p>
+            <ul>
+                {% for member in project.team_members %}
+                <li>{{ member.username }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- כפתור להוספת משימה -->
+<a href="{{ url_for('add_task', project_id=project.id) }}" target="_blank" class="btn btn-primary mt-3">
+    {{ 'הוסף משימה' if session['language'] == 'he' else 'Add Task' }}
+</a>
+    <a href="{{ url_for('tl_home') }}" class="btn btn-secondary mt-3">{{ 'חזרה לפרויקטים' if session['language'] == 'he' else 'Back to Projects' }}</a>
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: auto;
+    }
+    .card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+        background-color: #f8f9fa;
+    }
+    .card-title {
+        font-size: 1.25rem;
+    }
+    .card-body {
+        font-size: 1rem;
+    }
+    .btn-secondary {
+        font-size: 1rem;
+    }
+</style>
+{% endblock %}

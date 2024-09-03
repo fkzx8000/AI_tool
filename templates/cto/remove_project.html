@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'הסר פרויקט' if session['language'] == 'he' else 'Remove Project' }}{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>{{ 'הסר פרויקט ממנהל צוות' if session['language'] == 'he' else 'Remove Project from TL' }}</h1>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="project_name" class="form-label">{{ 'שם פרויקט:' if session['language'] == 'he' else 'Project Name:' }}</label>
+                <input type="text" class="form-control" id="project_name" name="project_name" value="{{ project.name }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="tl_id" class="form-label">{{ 'מנהל צוות:' if session['language'] == 'he' else 'Team Leader:' }}</label>
+                <select class="form-control" id="tl_id" name="tl_id">
+                    <option value="">{{ 'ללא' if session['language'] == 'he' else 'None' }}</option>
+                    {% for user in tls %}
+                        <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!--#BSPMS2429-69-->
+            <button type="submit" class="btn btn-primary">{{ 'הסר פרויקט' if session['language'] == 'he' else 'Remove Project' }}</button>
+        </form>
+    </div>
+{% endblock %}

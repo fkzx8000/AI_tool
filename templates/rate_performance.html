@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Performance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Insert Code for Performance Evaluation</h2>
+        <form method="POST" action="{{ url_for('rate_performance') }}">
+            <div class="form-group">
+                <label for="codeInput">Insert Code:</label>
+                <textarea class="form-control" id="codeInput" name="code_input" rows="10" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

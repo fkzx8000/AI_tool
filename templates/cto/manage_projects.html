@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'ניהול פרויקטים' if session['language'] == 'he' else 'Manage Projects' }}{% endblock %}
+
+{% block content %}
+    <h1>{{ 'ניהול פרויקטים' if session['language'] == 'he' else 'Manage Projects' }}</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ 'הוסף פרויקט' if session['language'] == 'he' else 'Add Project' }}</h2>
+                    <form method="POST" action="{{ url_for('add_project') }}">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">{{ 'שם הפרויקט:' if session['language'] == 'he' else 'Project Name:' }}</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">{{ 'תיאור:' if session['language'] == 'he' else 'Description:' }}</label>
+                            <textarea class="form-control" id="description" name="description" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <!-- BSPMS2429-292-->
+                            <label for="tl_id" class="form-label">{{ 'ראש צוות:' if session['language'] == 'he' else 'Team Leader:' }}</label>
+                            <select class="form-control" id="tl_id" name="tl_id" required>
+                                {% for user in tls %}
+                                    <option value="{{ user.id }}">{{ user.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">{{ 'הוסף פרויקט' if session['language'] == 'he' else 'Add Project' }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ 'פרויקטים' if session['language'] == 'he' else 'Projects' }}</h2>
+                    <ul class="list-group">
+                        {% for project in projects %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <!-- שם הפרויקט הוא כפתור שפותח מודאל -->
+                            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="{{ project.id }}">
+                                {{ project.name }}
+                            </button>
+                            <div>
+                                <a href="{{ url_for('remove_project', project_id=project.id) }}" class="btn btn-warning btn-sm">{{ 'הסר מראש צוות' if session['language'] == 'he' else 'Remove from TL' }}</a>
+                                <a href="{{ url_for('delete_project', project_id=project.id) }}" class="btn btn-danger btn-sm">{{ 'מחק' if session['language'] == 'he' else 'Delete' }}</a>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <button class="btn btn-info mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#noTlProjects" aria-expanded="false" aria-controls="noTlProjects">
+                        {{ 'צפה בפרויקטים ללא ראש צוות' if session['language'] == 'he' else 'View Projects without Team Leader' }}
+                    </button>
+                    <div class="collapse mt-2" id="noTlProjects">
+                        <ul class="list-group">
+                            {% for project in projects_without_tl %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    {{ project.name }} - {{ project.description }}
+                                </div>
+                                <div>
+                                    <!-- כפתור לפתיחת טופס בחירת ראש צוות -->
+                                    <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#assignTlModal" data-project-id="{{ project.id }}">
+                                        {{ 'הקצה ראש צוות' if session['language'] == 'he' else 'Assign TL' }}
+                                    </button>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Project Details -->
+<div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="projectModalLabel">{{ 'פרטי פרויקט' if session['language'] == 'he' else 'Project Details' }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="projectModalBody">
+                <!-- Project details will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Assigning Team Leader -->
+<div class="modal fade" id="assignTlModal" tabindex="-1" aria-labelledby="assignTlModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignTlModalLabel">{{ 'הקצה ראש צוות' if session['language'] == 'he' else 'Assign Team Leader' }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="assignTlForm" method="POST" action="{{ url_for('assign_tl') }}">
+                    <input type="hidden" id="project_id" name="project_id">
+                    <div class="mb-3">
+                        <label for="tl_id" class="form-label">{{ 'בחר ראש צוות:' if session['language'] == 'he' else 'Select Team Leader:' }}</label>
+                        <select class="form-control" id="tl_id" name="tl_id" required>
+                            {% for user in tls %}
+                                <option value="{{ user.id }}">{{ user.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">{{ 'הקצה' if session['language'] == 'he' else 'Assign' }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script for fetching project details -->
+<script>
+    var projectModal = document.getElementById('projectModal');
+    projectModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var projectId = button.getAttribute('data-project-id');
+        var modalBody = document.getElementById('projectModalBody');
+
+        fetch('/cto/view_project/' + projectId)
+            .then(response => response.text())
+            .then(data => {
+                modalBody.innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error fetching project details:', error);
+                modalBody.innerHTML = '<p>{{ 'שגיאה בטעינת פרטי הפרויקט. אנא נסה שוב מאוחר יותר.' if session['language'] == 'he' else 'Error loading project details. Please try again later.' }}</p>';
+            });
+    });
+</script>
+
+<!-- Script for setting project ID in the Assign TL modal -->
+<script>
+    var assignTlModal = document.getElementById('assignTlModal');
+    assignTlModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var projectId = button.getAttribute('data-project-id');
+        var inputProjectId = document.getElementById('project_id');
+        inputProjectId.value = projectId;
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

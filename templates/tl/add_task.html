@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'הוסף משימה' if session['language'] == 'he' else 'Add Task' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- BSPMS2429-114 -->
+    <h1>{{ 'הוסף משימה לפרויקט:' if session['language'] == 'he' else 'Add Task to Project:' }} {{ project.name }}</h1>
+    <form method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">{{ 'שם משימה' if session['language'] == 'he' else 'Task Name' }}</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">{{ 'תיאור משימה' if session['language'] == 'he' else 'Task Description' }}</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="assignee_id" class="form-label">{{ 'הקצה ל' if session['language'] == 'he' else 'Assign to' }}</label>
+            <select class="form-select" id="assignee_id" name="assignee_id">
+                <option value="">{{ 'בחר חבר צוות' if session['language'] == 'he' else 'Select a team member' }}</option>
+                {% for member in team_members %}
+                <option value="{{ member.id }}">{{ member.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'הוסף משימה' if session['language'] == 'he' else 'Add Task' }}</button>
+    </form>
+    <a href="{{ url_for('manage_project', project_id=project.id) }}" class="btn btn-secondary mt-3">{{ 'חזור לפרויקט' if session['language'] == 'he' else 'Back to Project' }}</a>
+</div>
+{% endblock %}

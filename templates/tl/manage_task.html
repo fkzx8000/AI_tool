@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'דף הבית של מנהל צוות' if session['language'] == 'he' else 'TL Home' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ 'ניהול משימה:' if session['language'] == 'he' else 'Manage Task:' }} {{ task.name }}</h1>
+    <h2>{{ 'הוסף תת-משימה' if session['language'] == 'he' else 'Add Sub-task' }}</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="subtask_name" class="form-label">{{ 'שם תת-משימה:' if session['language'] == 'he' else 'Sub-task Name:' }}</label>
+            <input type="text" class="form-control" id="subtask_name" name="subtask_name" required>
+        </div>
+        <div class="mb-3">
+            <label for="subtask_description" class="form-label">{{ 'תיאור:' if session['language'] == 'he' else 'Description:' }}</label>
+            <textarea class="form-control" id="subtask_description" name="subtask_description" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="assignee_id" class="form-label">{{ 'משוייך ל:' if session['language'] == 'he' else 'Assignee:' }}</label>
+            <select class="form-control" id="assignee_id" name="assignee_id" required>
+                {% for member in team_members %}
+                <option value="{{ member.id }}">{{ member.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'הוסף תת-משימה' if session['language'] == 'he' else 'Add Sub-task' }}</button>
+    </form>
+    <h2>{{ 'תתי-משימות' if session['language'] == 'he' else 'Sub-tasks' }}</h2>
+    <ul>
+        {% for subtask in subtasks %}
+        <li>
+            {{ subtask.name }} -
+            {{ 'סגור' if session['language'] == 'he' and subtask.status == 'closed' else subtask.status }}
+            {% if subtask.status == 'closed' %}
+            ({{ 'נסגר ב:' if session['language'] == 'he' else 'Closed at:' }} {{ subtask.closed_at }})
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'רישום מנהל' if session['language'] == 'he' else 'Admin Register' }}{% endblock %}
+
+{% block content %}
+    <h1>{{ 'רישום מנהל' if session['language'] == 'he' else 'Admin Register' }}</h1>
+    <form method="POST">
+        <label for="username">{{ 'שם משתמש:' if session['language'] == 'he' else 'Username:' }}</label>
+        <input type="text" id="username" name="username" required><br>
+
+        <label for="email">{{ 'אימייל:' if session['language'] == 'he' else 'Email:' }}</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="password">{{ 'סיסמה:' if session['language'] == 'he' else 'Password:' }}</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <button type="submit">{{ 'הרשמה' if session['language'] == 'he' else 'Register' }}</button>
+    </form>
+    <br>
+    <a href="{{ url_for('login') }}"><button>{{ 'חזרה להתחברות' if session['language'] == 'he' else 'Back to Login' }}</button></a>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'החזר משימה: ' if session['language'] == 'he' else 'Return Task: ' }}{{ task.name }}{% endblock %}
+
+{% block content %}
+    <!-- Page Heading -->
+    <h1 class="mb-4">{{ 'החזר משימה: ' if session['language'] == 'he' else 'Return Task: ' }}{{ task.name }}</h1>
+
+    <!-- Task Return Form -->
+    <form action="{{ url_for('return_task', task_id=task.id) }}" method="post">
+        <div class="mb-3">
+            <!-- Reason for Returning the Task -->
+            <label for="reason" class="form-label">{{ 'סיבה להחזרת המשימה:' if session['language'] == 'he' else 'Reason for returning the task:' }}</label>
+            <textarea class="form-control" name="reason" id="reason" rows="5" required placeholder="{{ 'הכנס את הסיבה להחזרת המשימה...' if session['language'] == 'he' else 'Enter the reason for returning the task...' }}"></textarea>
+        </div>
+        <!-- Return Task Button -->
+        <button class="btn btn-danger" type="submit">{{ 'החזר משימה' if session['language'] == 'he' else 'Return Task' }}</button>
+        <!-- Cancel Button -->
+        <a href="{{ url_for('rnd_home') }}" class="btn btn-secondary ms-2">{{ 'בטל' if session['language'] == 'he' else 'Cancel' }}</a>
+    </form>
+{% endblock %}

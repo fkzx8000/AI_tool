@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'הגדר תפקיד משתמש' if session['language'] == 'he' else 'Set User Role' }}{% endblock %}
+
+{% block content %}
+    <h1>{{ 'הגדר תפקיד משתמש' if session['language'] == 'he' else 'Set User Role' }}</h1>
+    <form method="POST">
+        <label for="user_id">{{ 'משתמש:' if session['language'] == 'he' else 'User:' }}</label>
+        <select id="user_id" name="user_id">
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }} ({{ 'תפקיד נוכחי:' if session['language'] == 'he' else 'current role:' }} {{ user.role }})</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="role">{{ 'תפקיד:' if session['language'] == 'he' else 'Role:' }}</label>
+        <select id="role" name="role">
+            <option value="admin">Admin</option>
+            <option value="CTO">CTO</option>
+            <option value="TL">{{ 'ראש צוות' if session['language'] == 'he' else 'TL' }}</option>
+            <option value="R&D">{{ 'מפתח' if session['language'] == 'he' else 'R&D' }}</option>
+            <option value="viewer">{{ 'צופה' if session['language'] == 'he' else 'Viewer' }}</option>
+            <option value="marketing">{{ 'שיווק' if session['language'] == 'he' else 'marketing' }}</option>
+        </select><br>
+
+        <button type="submit">{{ 'הגדר תפקיד' if session['language'] == 'he' else 'Set Role' }}</button>
+    </form>
+    <br>
+    <a href="{{ url_for('admin_home') }}"><button>{{ 'חזרה לדף מנהל' if session['language'] == 'he' else 'Back to Admin Home' }}</button></a>
+{% endblock %}

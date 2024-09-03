@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Team Average Scores</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Team Average Scores</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Team Name</th>
+                <th>Average Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for team in team_scores %}
+                <tr>
+                    <td>{{ team.team_name }}</td>
+                    <td>{{ team.average_score }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'ניהול לקוחות' if session['language'] == 'he' else 'Client Management' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4" dir="{{ 'rtl' if session['language'] == 'he' else 'ltr' }}">
+    <h1>{{ 'ניהול לקוחות' if session['language'] == 'he' else 'Client Management' }}</h1>
+
+    <!-- Display flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Button to open the modal for adding a new client -->
+    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addClientModal">
+        {{ 'הוסף לקוח חדש' if session['language'] == 'he' else 'Add New Client' }}
+    </button>
+
+    <!-- Modal for adding a new client -->
+    <div class="modal fade" id="addClientModal" tabindex="-1" aria-labelledby="addClientModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="{{ url_for('add_client') }}">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addClientModalLabel">{{ 'הוסף לקוח חדש' if session['language'] == 'he' else 'Add New Client' }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">{{ 'שם' if session['language'] == 'he' else 'Name' }}</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="mobile_number" class="form-label">{{ 'מספר נייד' if session['language'] == 'he' else 'Mobile Number' }}</label>
+                            <input type="text" class="form-control" id="mobile_number" name="mobile_number">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">{{ 'אימייל' if session['language'] == 'he' else 'Email' }}</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">{{ 'כתובת' if session['language'] == 'he' else 'Address' }}</label>
+                            <input type="text" class="form-control" id="address" name="address">
+                        </div>
+                        <div class="mb-3">
+                            <label for="company" class="form-label">{{ 'חברה' if session['language'] == 'he' else 'Company' }}</label>
+                            <input type="text" class="form-control" id="company" name="company">
+                        </div>
+                        <div class="mb-3">
+                            <label for="payment_method" class="form-label">{{ 'אמצעי תשלום' if session['language'] == 'he' else 'Payment Method' }}</label>
+                            <input type="text" class="form-control" id="payment_method" name="payment_method">
+                        </div>
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">{{ 'הערות' if session['language'] == 'he' else 'Notes' }}</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="potential" name="potential" value="1">
+                            <label class="form-check-label" for="potential">{{ 'לקוח פוטנציאלי' if session['language'] == 'he' else 'Potential Client' }}</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'סגור' if session['language'] == 'he' else 'Close' }}</button>
+                        <button type="submit" class="btn btn-primary">{{ 'שמור לקוח' if session['language'] == 'he' else 'Save Client' }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Potential Clients -->
+    <h2>{{ 'לקוחות פוטנציאליים' if session['language'] == 'he' else 'Potential Clients' }}</h2>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>{{ 'שם' if session['language'] == 'he' else 'Name' }}</th>
+                <th>{{ 'מספר נייד' if session['language'] == 'he' else 'Mobile Number' }}</th>
+                <th>{{ 'אימייל' if session['language'] == 'he' else 'Email' }}</th>
+                <th>{{ 'כתובת' if session['language'] == 'he' else 'Address' }}</th>
+                <th>{{ 'חברה' if session['language'] == 'he' else 'Company' }}</th>
+                <th>{{ 'אמצעי תשלום' if session['language'] == 'he' else 'Payment Method' }}</th>
+                <th>{{ 'הערות' if session['language'] == 'he' else 'Notes' }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in potential_clients %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('view_client', client_id=client.id) }}">{{ client.name }}</a>
+                </td>
+                <td>{{ client.mobile_number or 'N/A' }}</td>
+                <td>{{ client.email or 'N/A' }}</td>
+                <td>{{ client.address or 'N/A' }}</td>
+                <td>{{ client.company or 'N/A' }}</td>
+                <td>{{ client.payment_method or 'N/A' }}</td>
+                <td>{{ client.notes or 'N/A' }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7">{{ 'אין לקוחות פוטנציאליים זמינים' if session['language'] == 'he' else 'No Potential Clients Available' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Existing Clients -->
+    <h2>{{ 'לקוחות קיימים' if session['language'] == 'he' else 'Existing Clients' }}</h2>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>{{ 'שם' if session['language'] == 'he' else 'Name' }}</th>
+                <th>{{ 'מספר נייד' if session['language'] == 'he' else 'Mobile Number' }}</th>
+                <th>{{ 'אימייל' if session['language'] == 'he' else 'Email' }}</th>
+                <th>{{ 'כתובת' if session['language'] == 'he' else 'Address' }}</th>
+                <th>{{ 'חברה' if session['language'] == 'he' else 'Company' }}</th>
+                <th>{{ 'אמצעי תשלום' if session['language'] == 'he' else 'Payment Method' }}</th>
+                <th>{{ 'הערות' if session['language'] == 'he' else 'Notes' }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in existing_clients %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('view_client', client_id=client.id) }}">{{ client.name }}</a>
+                </td>
+                <td>{{ client.mobile_number or 'N/A' }}</td>
+                <td>{{ client.email or 'N/A' }}</td>
+                <td>{{ client.address or 'N/A' }}</td>
+                <td>{{ client.company or 'N/A' }}</td>
+                <td>{{ client.payment_method or 'N/A' }}</td>
+                <td>{{ client.notes or 'N/A' }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7">{{ 'אין לקוחות קיימים זמינים' if session['language'] == 'he' else 'No Existing Clients Available' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Add Bootstrap CSS and JS for modal functionality -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

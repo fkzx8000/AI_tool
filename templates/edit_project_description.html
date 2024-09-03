@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'ערוך תיאור פרויקט' if session['language'] == 'he' else 'Edit Project Description' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ 'ערוך תיאור עבור פרויקט:' if session['language'] == 'he' else 'Edit Description for Project:' }} {{ project.name }}</h1>
+    <form method="post">
+        <div class="mb-3">
+            <label for="description" class="form-label">{{ 'תיאור פרויקט' if session['language'] == 'he' else 'Project Description' }}</label>
+            <textarea class="form-control" id="description" name="description" rows="5" required>{{ project.description }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'עדכן תיאור' if session['language'] == 'he' else 'Update Description' }}</button>
+    </form>
+    <a href="{{ url_for('manage_project', project_id=project.id) }}" class="btn btn-secondary mt-3">{{ 'חזרה לפרויקט' if session['language'] == 'he' else 'Back to Project' }}</a>
+</div>
+{% endblock %}

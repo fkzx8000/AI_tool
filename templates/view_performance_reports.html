@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+<!--BSPMS2429-159 -->
+{% block title %}
+    {{ 'דוחות ביצועי קוד' if session['language'] == 'he' else 'Code Performance Reports' }}
+{% endblock %}
+
+{% block content %}
+<style>
+    .content-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .reports-container {
+        padding: 20px;
+        background-color: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow-y: auto;
+    }
+
+    .table {
+        width: 100%;
+        background-color: #ffffff;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .table th, .table td {
+        padding: 15px;
+        text-align: left;
+    }
+
+    .table th {
+        background-color: #343a40;
+        color: #f8f9fa;
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background-color: #f2f2f2;
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+    .table tbody tr:hover {
+        background-color: #e9ecef;
+    }
+
+    .badge-success {
+        background-color: #5cb85c;
+    }
+
+    .preformatted-text {
+        background-color: #2d2d2d;
+        color: #c5c8c6;
+        padding: 10px;
+        border-radius: 4px;
+        font-family: 'Courier New', Courier, monospace;
+        white-space: pre-wrap;
+    }
+
+    .no-reports {
+        text-align: center;
+        font-size: 18px;
+        color: #6c757d;
+    }
+</style>
+
+<div class="content-wrapper">
+    <div class="reports-container">
+        <h2>{{ 'דוחות ביצועי קוד' if session['language'] == 'he' else 'Code Performance Reports' }}</h2>
+        {% if reports %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>{{ 'שם משתמש' if session['language'] == 'he' else 'Username' }}</th>
+                    <th>{{ 'דוח' if session['language'] == 'he' else 'Report' }}</th>
+                    <th>{{ 'נוצר בתאריך' if session['language'] == 'he' else 'Created At' }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td><b>{{ report.user.username }}</b></td>
+                    <td><div class="preformatted-text">{{ report.report }}</div></td>
+                    <td>{{ report.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="no-reports">
+            {{ 'אין דוחות להצגה' if session['language'] == 'he' else 'No reports to display.' }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

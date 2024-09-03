@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'צור מסע פרסום' if session['language'] == 'he' else 'Create Campaign' }}{% endblock %}
+
+{% block content %}
+<div class="container" dir="{{ 'rtl' if session['language'] == 'he' else 'ltr' }}">
+    <h1>{{ 'צור מסע פרסום' if session['language'] == 'he' else 'Create Campaign' }}</h1>
+    <form method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">{{ 'שם הקמפיין' if session['language'] == 'he' else 'Campaign Name' }}</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="start_date" class="form-label">{{ 'תאריך התחלה' if session['language'] == 'he' else 'Start Date' }}</label>
+            <input type="date" class="form-control" id="start_date" name="start_date" required>
+        </div>
+        <div class="mb-3">
+            <label for="end_date" class="form-label">{{ 'תאריך סיום' if session['language'] == 'he' else 'End Date' }}</label>
+            <input type="date" class="form-control" id="end_date" name="end_date" required>
+        </div>
+        <div class="mb-3">
+            <label for="target_audience" class="form-label">{{ 'קהל יעד' if session['language'] == 'he' else 'Target Audience' }}</label>
+            <input type="text" class="form-control" id="target_audience" name="target_audience" required>
+        </div>
+        <div class="mb-3">
+            <label for="channels" class="form-label">{{ 'ערוצי פרסום' if session['language'] == 'he' else 'Advertising Channels' }}</label>
+            <input type="text" class="form-control" id="channels" name="channels" required>
+        </div>
+        <div class="mb-3">
+            <label for="budget" class="form-label">{{ 'תקציב' if session['language'] == 'he' else 'Budget' }}</label>
+            <input type="number" class="form-control" id="budget" name="budget" required>
+        </div>
+        <div class="mb-3">
+            <label for="expected_expenses" class="form-label">{{ 'הוצאות צפויות' if session['language'] == 'he' else 'Expected Expenses' }}</label>
+            <input type="number" class="form-control" id="expected_expenses" name="expected_expenses" required>
+        </div>
+        <div class="mb-3">
+            <label for="project" class="form-label">{{ 'פרויקט שיווקי' if session['language'] == 'he' else 'Marketing Project' }}</label>
+            <select class="form-control" id="project" name="marketing_project_id" required>
+                {% for project in marketing_projects %}
+                <option value="{{ project.id }}">{{ project.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'צור מסע פרסום' if session['language'] == 'he' else 'Create Campaign' }}</button>
+    </form>
+</div>
+{% endblock %}

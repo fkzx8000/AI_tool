@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="{{ 'he' if session['language'] == 'he' else 'en' }}" dir="{{ 'rtl' if session['language'] == 'he' else 'ltr' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            direction: {{ 'rtl' if session['language'] == 'he' else 'ltr' }};
+            text-align: {{ 'right' if session['language'] == 'he' else 'left' }};
+        }
+        .navbar-nav {
+            margin-left: {{ 'auto' if session['language'] == 'he' else '0' }};
+            margin-right: {{ '0' if session['language'] == 'he' else 'auto' }};
+        }
+        .navbar-brand {
+            margin-{{ 'right' if session['language'] == 'he' else 'left' }}: auto;
+            margin-{{ 'left' if session['language'] == 'he' else 'right' }}: 0;
+        }
+        .language-switcher {
+            position: absolute;
+            {{ 'left' if session['language'] == 'he' else 'right' }}: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='image/logoWeb.png') }}" alt="Logo" style="height: 50px;"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('home') }}">{{ 'בית' if session['language'] == 'he' else 'Home' }}</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                    {% if current_user.role == 'admin' %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ 'CTO' if session['language'] == 'he' else 'CTO' }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ url_for('manage_roles') }}">Manage roles</a>
+                                <a class="dropdown-item" href="{{ url_for('manage_projects') }}">Manage projects</a>
+                                <a class="dropdown-item" href="{{ url_for('cto_home') }}">CTO Capabilities</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ 'R&D' if session['language'] == 'he' else 'R&D' }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ url_for('task_queue') }}">Task Queue</a>
+                                <a class="dropdown-item" href="{{ url_for('rate_security') }}">Rate Security</a>
+                                <a class="dropdown-item" href="{{ url_for('rate_consistency') }}">Rate Consistency</a>
+                                <a class="dropdown-item" href="{{ url_for('rate_code') }}">Rate Code</a>
+                                <a class="dropdown-item" href="{{ url_for('rnd_home') }}">R&D Capabilities</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ 'marketing' if session['language'] == 'he' else 'Marketing' }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ url_for('create_marketing_project') }}">Create Marketing Project</a>
+                                <a class="dropdown-item" href="{{ url_for('client_management') }}">Client Management</a>
+                                <a class="dropdown-item" href="{{ url_for('marketing_home') }}">marketing home</a>
+                            </div>
+                        </li>
+                    {% elif current_user.role == 'CTO' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('manage_roles') }}">{{ 'ניהול תפקידים' if session['language'] == 'he' else 'Manage Roles' }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('manage_projects') }}">{{ 'ניהול פרויקטים' if session['language'] == 'he' else 'Manage Projects' }}</a>
+                        </li>
+                    {% elif current_user.role == 'R&D' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('task_queue') }}">{{ 'תור משימות' if session['language'] == 'he' else 'Task Queue' }}</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ 'כלים' if session['language'] == 'he' else 'Tools' }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ url_for('rate_security') }}">{{ 'דירוג אבטחה' if session['language'] == 'he' else 'Rate Security' }}</a>
+                                <a class="dropdown-item" href="{{ url_for('rate_consistency') }}">{{ 'דירוג עקביות' if session['language'] == 'he' else 'Rate Consistency' }}</a>
+                                <a class="dropdown-item" href="{{ url_for('rate_code') }}">{{ 'דירוג קוד' if session['language'] == 'he' else 'Rate Code' }}</a>
+                            </div>
+                        </li>
+                    {% elif current_user.role == 'marketing' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('create_marketing_project') }}">{{ 'יצירת פרויקט שיווקי' if session['language'] == 'he' else 'Create Marketing Project' }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('client_management') }}">{{ 'ניהול לקוחות' if session['language'] == 'he' else 'Client Management' }}</a>
+                        </li>
+                    {% endif %}
+
+                    {% if current_user.role != 'viewer' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('performance_reports') }}">{{ 'דוח' if session['language'] == 'he' else 'Performance Reports' }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('chat') }}">{{ 'צ\'אט' if session['language'] == 'he' else 'Chat' }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('my_project_logs') }}">{{ 'לוגים' if session['language'] == 'he' else 'Logs' }}</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">{{ 'התנתק' if session['language'] == 'he' else 'Logout' }}</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">{{ 'התחבר' if session['language'] == 'he' else 'Login' }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}">{{ 'הרשמה' if session['language'] == 'he' else 'Register' }}</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item language-switcher">
+                    <form id="languageForm" method="post" action="{{ url_for('set_language') }}">
+                        <select name="language" class="form-control" onchange="this.form.submit()">
+                            <option value="he" {% if session['language'] == 'he' %}selected{% endif %}>עברית</option>
+                            <option value="en" {% if session['language'] == 'en' %}selected{% endif %}>English</option>
+                        </select>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- הוספת ספריות JavaScript נדרשות -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'יתרונות המערכת למפתחי תוכנה' if session['language'] == 'he' else 'System Benefits for Software Developers' }}{% endblock %}
+
+{% block content %}
+    <h1>{{ 'יתרונות המערכת למפתחי תוכנה' if session['language'] == 'he' else 'System Benefits for Software Developers' }}</h1>
+
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-white">{{ 'המערכת לניהול פרויקטים' if session['language'] == 'he' else 'Project Management System' }}</h2>
+        </div>
+        <div class="card-body">
+            <p>{{ 'המערכת לניהול פרויקטים היא כלי עוצמתי המיועד למפתחי תוכנה ולמנהלי צוותים. המערכת מספקת פלטפורמה לניהול פרויקטים, משימות, צוותים והערכת קוד. המערכת מאפשרת לארגונים לשפר את היעילות והשקיפות של תהליכי הפיתוח.' if session['language'] == 'he' else 'The project management system is a powerful tool designed for software developers and team managers. The system provides a platform for managing projects, tasks, teams, and code evaluation. It enables organizations to enhance the efficiency and transparency of development processes.' }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-white">{{ 'משתמשים ותפקידים במערכת' if session['language'] == 'he' else 'Users and Roles in the System' }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Admin:</strong> {{ 'משתמש זה אחראי על ניהול כלל המערכת, כולל יצירה וניהול של משתמשים וצוותים. למנהל יש גישה לכל הפונקציות במערכת.' if session['language'] == 'he' else 'This user is responsible for overall system management, including creating and managing users and teams. The admin has access to all functions in the system.' }}</p>
+            <p><strong>CTO:</strong> {{ 'מנהל הטכנולוגיות אחראי על ניהול צוותים, הקצאת פרויקטים ומעקב אחר התקדמות הפרויקטים. יש לו יכולות לניהול צוותים ותפקידים.' if session['language'] == 'he' else 'The Chief Technology Officer is responsible for managing teams, assigning projects, and tracking project progress. They have the ability to manage teams and roles.' }}</p>
+            <p><strong>TL (Team Leader):</strong> {{ 'מנהל צוות אחראי על ניהול הצוות והמשימות של הצוות. הוא יכול ליצור משימות, להקצות אותן ולנהל את התקדמות הצוות.' if session['language'] == 'he' else 'The team leader is responsible for managing the team and its tasks. They can create tasks, assign them, and manage team progress.' }}</p>
+            <p><strong>R&D:</strong> {{ 'מפתחים בצוות מחקר ופיתוח אחראים על ביצוע המשימות שהוקצו להם, והם יכולים לדרג את הקוד שלהם מבחינת איכות, אבטחה ועקביות.' if session['language'] == 'he' else 'Developers in the research and development team are responsible for completing assigned tasks and can rate their code for quality, security, and consistency.' }}</p>
+            <p><strong>Viewer:</strong> {{ 'משתמש שיכול לראות דוחות ומידע שאינו רגיש על הפרויקטים והצוותים.' if session['language'] == 'he' else 'A user who can view reports and non-sensitive information about projects and teams.' }}</p>
+            <p><strong>Marketing:</strong> {{ 'משתמש זה אחראי על ניהול פרויקטים שיווקיים, יצירת קמפיינים ומעקב אחר לקוחות.' if session['language'] == 'he' else 'This user is responsible for managing marketing projects, creating campaigns, and tracking clients.' }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-white">{{ '1. ניהול פרויקטים ומשימות מסודר ומדויק' if session['language'] == 'he' else '1. Structured and Accurate Project and Task Management' }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>{{ 'ארגון משימות:' if session['language'] == 'he' else 'Task Organization:' }}</strong> {{ 'המערכת מאפשרת לכל צוות לנהל את המשימות שלו בצורה מסודרת, להקצות אותן למפתחים ספציפיים ולעקוב אחרי ההתקדמות. זה יכול לשפר את היעילות ולמנוע בלבול בנוגע למה שצריך לעשות.' if session['language'] == 'he' else 'The system allows each team to manage its tasks in an organized manner, assign them to specific developers, and track progress. This can improve efficiency and prevent confusion about what needs to be done.' }}</p>
+            <p><strong>{{ 'תתי-משימות:' if session['language'] == 'he' else 'Subtasks:' }}</strong> {{ 'תמיכה בתתי-משימות מאפשרת פירוק משימות מורכבות לחלקים קטנים יותר, מה שמקל על ניהול הזמן והעבודה.' if session['language'] == 'he' else 'Support for subtasks allows complex tasks to be broken down into smaller parts, making time and work management easier.' }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-white">{{ '2. שקיפות ושיתוף פעולה' if session['language'] == 'he' else '2. Transparency and Collaboration' }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>{{ 'מעקב אחר סטטוס המשימות:' if session['language'] == 'he' else 'Task Status Tracking:' }}</strong> {{ 'המפתחים יכולים לראות בכל רגע נתון מה הסטטוס של כל משימה, מה שמקל על הבנה איפה נמצאת העבודה ומה עוד נשאר לעשות.' if session['language'] == 'he' else 'Developers can see the status of each task at any given moment, which helps them understand where the work stands and what remains to be done.' }}</p>
+            <p><strong>{{ 'שיתוף פעולה בתוך הצוות:' if session['language'] == 'he' else 'Team Collaboration:' }}</strong> {{ 'על ידי ניהול צוותים בצורה מסודרת, המפתחים יכולים לשתף פעולה בצורה יותר אפקטיבית ולוודא שכל חבר צוות יודע מה התפקיד שלו ומה המטרות של הצוות.' if session['language'] == 'he' else 'By managing teams in an orderly manner, developers can collaborate more effectively and ensure that every team member knows their role and the team\'s objectives.' }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-white">{{ '3. הערכת קוד ומשוב מתמשך' if session['language'] == 'he' else '3. Code Evaluation and Continuous Feedback' }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>{{ 'הערכת קוד אוטומטית:' if session['language'] == 'he' else 'Automatic Code Evaluation:' }}</strong> {{ 'שימוש בכלים כמו GPT להערכת קוד יכול לעזור למפתחים לקבל משוב אובייקטיבי על איכות הקוד שלהם. זה יכול לעודד למידה ושיפור מתמיד.' if session['language'] == 'he' else 'Using tools like GPT for code evaluation can help developers receive objective feedback on their code quality. This can encourage continuous learning and improvement.' }}</p>
+            <p><strong>{{ 'תיעוד ההערכות:' if session['language'] == 'he' else 'Evaluation Documentation:' }}</strong> {{ 'תיעוד ההערכות והמשוב לאורך הזמן מאפשר למפתחים לראות את ההתקדמות שלהם ולהבין מה הם יכולים לשפר.' if session['language'] == 'he' else 'Documenting evaluations and feedback over time allows developers to see their progress and understand what they can improve.' }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-white">{{ '4. שיפור מיומנויות הקוד' if session['language'] == 'he' else '4. Code Skills Improvement' }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>{{ 'הערכת אבטחה ועקביות:' if session['language'] == 'he' else 'Security and Consistency Evaluation:' }}</strong> {{ 'המערכת מאפשרת למפתחים לבדוק את הקוד שלהם גם בהיבטי אבטחה ועקביות, מה שיכול לשפר את איכות הקוד והאבטחה של המוצרים שהם מפתחים.' if session['language'] == 'he' else 'The system allows developers to check their code for security and consistency aspects, which can improve code quality and product security.' }}</p>
+            <p><strong>{{ 'ציון ממוצע אישי וצוותי:' if session['language'] == 'he' else 'Individual and Team Average Score:' }}</strong> {{ 'המפתחים יכולים לראות את הציון הממוצע שלהם ושל הצוות שלהם בנוגע לאיכות הקוד, מה שיכול לעודד שיפור מתמיד ותחרות בריאה בתוך הצוות.' if session['language'] == 'he' else 'Developers can see their individual and team average scores for code quality, which can encourage continuous improvement and healthy competition within the team.' }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-white">{{ '5. לוגים ותיעוד' if session['language'] == 'he' else '5. Logs and Documentation' }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>{{ 'מעקב אחר שינויים:' if session['language'] == 'he' else 'Change Tracking:' }}</strong> {{ 'המערכת מתעדת כל שינוי שנעשה בפרויקט או במשימות, כולל מי ביצע את השינוי ומתי. זה עוזר במעקב אחר התקדמות ותקלות.' if session['language'] == 'he' else 'The system records every change made to a project or tasks, including who made the change and when. This helps track progress and issues.' }}</p>
+            <p><strong>{{ 'היסטוריה ולמידה מהעבר:' if session['language'] == 'he' else 'History and Learning from the Past:' }}</strong> {{ 'על ידי שמירת היסטוריה של כל הפעולות וההערכות, המפתחים יכולים ללמוד מטעויות עבר ולהשתפר בעבודתם.' if session['language'] == 'he' else 'By maintaining a history of all actions and evaluations, developers can learn from past mistakes and improve their work.' }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-white">{{ 'הדרכה' if session['language'] == 'he' else 'Training' }}</h2>
+        </div>
+        <div class="card-body d-flex justify-content-between">
+            <div class="video-container" style="width: 48%;">
+                <h3 class="text-center">{{ 'הדרכה לשיווק' if session['language'] == 'he' else 'Marketing Training' }}</h3>
+                <iframe width="100%" height="360" src="https://www.youtube.com/embed/i5SBADRr7fs?si=5V1Y7qga_Vh67VYy" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-container" style="width: 48%;">
+                <h3 class="text-center">{{ 'הדרכה כללית לפני שינויים' if session['language'] == 'he' else 'General Training Before Changes' }}</h3>
+                <iframe width="100%" height="360" src="https://www.youtube.com/embed/6DBLpO0ROkQ?si=J78Y8bUXmv0QgcgJ" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

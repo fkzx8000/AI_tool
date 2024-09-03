@@ -1,0 +1,173 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.navbar-brand {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.nav-link {
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+    color: #333;
+}
+
+.nav-link:hover {
+    color: #00aaff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 1.75em;
+    margin-bottom: 10px;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.table th, .table td {
+    padding: 15px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
+.btn {
+    font-size: 1em;
+}
+
+.form-control {
+    font-size: 1em;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.form-select {
+    font-size: 1em;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input[type="text"] {
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-right: none;
+}
+
+.search-bar button {
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+    border-bottom: 2px solid #0056b3;
+}
+
+a:active {
+    color: #004494;
+}
+
+/* New styles for modal links */
+.modal-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, border-bottom 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.modal-link:hover {
+    background-color: #e9f5ff;
+    border-bottom: 2px solid #0056b3;
+}
+
+.modal-link:active {
+    background-color: #d0ebff;
+    color: #004494;
+}
+
+/* New style for navbar toggler button text color */
+.navbar-toggler {
+    color: black;
+    border-color: rgba(0, 0, 0, 0.1); /* צבע של כפתור ה-toggle של ה-navbar */
+}
+.code-editor {
+    background-color: #282c34; /* צבע רקע כהה כמו בעורכי קוד */
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.code-input {
+    font-family: 'Courier New', Courier, monospace;
+    color: #abb2bf; /* צבע טקסט אופייני לעורכי קוד */
+    background-color: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    width: 100%;
+}
+
+.code-input:focus {
+    outline: none; /* הסרת קו מסביב כאשר בשדה */
+}
+

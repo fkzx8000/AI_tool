@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'הרשמה' if session['language'] == 'he' else 'Register' }}{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary ">
+                    <h2 class="card-title text-center text-white">{{ 'הרשמה' if session['language'] == 'he' else 'Register' }}</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">{{ 'שם משתמש:' if session['language'] == 'he' else 'Username:' }}</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">{{ 'סיסמה:' if session['language'] == 'he' else 'Password:' }}</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">{{ 'הרשמה' if session['language'] == 'he' else 'Register' }}</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{ url_for('login') }}" class="text-decoration-none">{{ 'כבר יש לך חשבון? התחבר כאן.' if session['language'] == 'he' else 'Already have an account? Login here.' }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

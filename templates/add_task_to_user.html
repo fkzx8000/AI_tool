@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'הוסף משימה ל' if session['language'] == 'he' else 'Add Task to' }} {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ 'הוסף משימה ל' if session['language'] == 'he' else 'Add Task to' }} {{ user.username }} {{ 'בפרויקט:' if session['language'] == 'he' else 'in Project:' }} {{ project.name }}</h1>
+    <form method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">{{ 'שם משימה' if session['language'] == 'he' else 'Task Name' }}</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">{{ 'תיאור משימה' if session['language'] == 'he' else 'Task Description' }}</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'הוסף משימה' if session['language'] == 'he' else 'Add Task' }}</button>
+    </form>
+    <a href="{{ url_for('tl_home') }}" class="btn btn-secondary mt-3">{{ 'חזרה לדף הבית של מנהל הצוות' if session['language'] == 'he' else 'Back to Team Leader Home' }}</a>
+</div>
+{% endblock %}

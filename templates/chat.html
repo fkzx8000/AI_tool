@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'צ׳אט עם חברי צוות' if session['language'] == 'he' else 'Chat with Team Members' }}{% endblock %}
+
+{% block content %}
+
+        <div class="row">
+            <!-- עמודת רשימות משתמשים -->
+            <div class="col-md-6">
+                <h2>{{ 'חברי הצוות שלך' if session['language'] == 'he' else 'Your Team Members' }}</h2>
+                <ul class="list-group mb-4">
+                    {% for user in team_members %}
+                        <li class="list-group-item">
+                            <a href="{{ url_for('chat_with_user', user_id=user.id) }}">{{ user.username }}</a> ({{ user.role }})
+                        </li>
+                    {% endfor %}
+                </ul>
+                <h2>{{ 'משתמשים אחרים' if session['language'] == 'he' else 'Other Users' }}</h2>
+                <ul class="list-group">
+                    {% for user in other_users %}
+                        <li class="list-group-item">
+                            <a href="{{ url_for('chat_with_user', user_id=user.id) }}">{{ user.username }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- עמודת שליחת הודעות -->
+            <div class="col-md-6">
+                <h1>{{ 'הודעה מהירה' if session['language'] == 'he' else 'Quick Message' }}</h1>
+                <form action="{{ url_for('chat') }}" method="post">
+                    <div class="form-group mb-3">
+                        <label for="receiver_id">{{ 'בחר משתמש:' if session['language'] == 'he' else 'Select User:' }}</label>
+                        <select name="receiver_id" id="receiver_id" class="form-control">
+                            <optgroup label="{{ 'חברי הצוות שלך' if session['language'] == 'he' else 'Your Team Members' }}">
+                                {% for user in team_members %}
+                                    <option value="{{ user.id }}">{{ user.username }} ({{ user.role }})</option>
+                                {% endfor %}
+                            </optgroup>
+                            <optgroup label="{{ 'משתמשים אחרים' if session['language'] == 'he' else 'Other Users' }}">
+                                {% for user in other_users %}
+                                    <option value="{{ user.id }}">{{ user.username }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="message">{{ 'הודעה:' if session['language'] == 'he' else 'Message:' }}</label>
+                        <textarea name="message" id="message" class="form-control message-textarea" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary">{{ 'שלח הודעה' if session['language'] == 'he' else 'Send Message' }}</button>
+                </form>
+            </div>
+        </div>
+
+
+    <!-- CSS -->
+    <style>
+        .message-textarea {
+            height: 200px; /* גובה התיבה */
+            resize: none; /* מניעת שינוי גודל */
+            font-size: 16px; /* גודל טקסט בנוני וברור */
+        }
+        .list-group-item a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .list-group-item a:hover {
+            text-decoration: underline;
+            color: #007bff;
+        }
+    </style>
+{% endblock %}

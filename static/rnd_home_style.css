@@ -1,0 +1,78 @@
+/* rnd_home_style.css */
+
+/* סגנון כותרת ראשית */
+.header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 36px;
+}
+
+.header p {
+    margin-top: 5px;
+    font-size: 18px;
+}
+
+/* סגנון התוכן */
+.content {
+    padding: 20px;
+}
+
+/* סגנון כותרת משנית */
+.sub-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.sub-header h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* סגנון אזור השיחה */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+textarea#code-input {
+    width: 80%;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-family: monospace;
+}
+
+button#send-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button#send-button:hover {
+    background-color: #0056b3;
+}
+
+#response-container {
+    width: 80%;
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+}

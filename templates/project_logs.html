@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'לוגים של פרויקטים וצוותים' if session['language'] == 'he' else 'Project and Team Logs' }}{% endblock %}
+
+{% block content %}
+    <h1>{{ 'לוגים של פרויקטים וצוותים' if session['language'] == 'he' else 'Project and Team Logs' }}</h1>
+    {% if logs %}
+        <ul class="list-group">
+            {% for log in logs %}
+            <li class="list-group-item">
+                <strong>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</strong> -
+                <em>{{ 'פרויקט:' if session['language'] == 'he' else 'Project:' }}</em> {{ log.project.name }}<br>
+                <em>{{ 'על ידי:' if session['language'] == 'he' else 'By:' }}</em> {{ log.user.username }}<br>
+                <p>{{ log.message }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>{{ 'אין לוגים זמינים.' if session['language'] == 'he' else 'No logs available.' }}</p>
+    {% endif %}
+{% endblock %}

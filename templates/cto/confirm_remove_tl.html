@@ -1,0 +1,15 @@
+<!-- templates/cto/confirm_remove_tl.html -->
+{% extends "base.html" %}
+
+{% block title %}{{ 'אשר הסרת ראש צוות' if session['language'] == 'he' else 'Confirm Remove Team Leader' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ 'הסר את ראש הצוות מהפרויקט:' if session['language'] == 'he' else 'Remove Team Leader from Project:' }} {{ project.name }}</h1>
+    <p>{{ 'האם אתה בטוח שברצונך להסיר את ראש הצוות מהפרויקט הזה?' if session['language'] == 'he' else 'Are you sure you want to remove the Team Leader from this project?' }}</p>
+    <form method="POST">
+        <button type="submit" class="btn btn-warning">{{ 'כן, הסר את ראש הצוות' if session['language'] == 'he' else 'Yes, Remove TL' }}</button>
+        <a href="{{ url_for('manage_projects') }}" class="btn btn-secondary">{{ 'ביטול' if session['language'] == 'he' else 'Cancel' }}</a>
+    </form>
+</div>
+{% endblock %}

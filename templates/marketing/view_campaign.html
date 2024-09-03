@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'פרטי קמפיין' if session['language'] == 'he' else 'Campaign Details' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ campaign.name }} {{ 'פרטים' if session['language'] == 'he' else 'Details' }}</h1>
+    <p><strong>{{ 'תאריך התחלה:' if session['language'] == 'he' else 'Start Date:' }}</strong> {{ campaign.start_date.strftime('%Y-%m-%d') }}</p>
+    <p><strong>{{ 'תאריך סיום:' if session['language'] == 'he' else 'End Date:' }}</strong> {{ campaign.end_date.strftime('%Y-%m-%d') }}</p>
+    <p><strong>{{ 'קהל יעד:' if session['language'] == 'he' else 'Target Audience:' }}</strong> {{ campaign.target_audience }}</p>
+    <p><strong>{{ 'ערוצים:' if session['language'] == 'he' else 'Channels:' }}</strong> {{ campaign.channels }}</p>
+    <p><strong>{{ 'תקציב:' if session['language'] == 'he' else 'Budget:' }}</strong> {{ campaign.budget }}</p>
+    <p><strong>{{ 'הוצאות בפועל:' if session['language'] == 'he' else 'Actual Expenses:' }}</strong> {{ campaign.actual_expenses }}</p>
+    <p><strong>{{ 'הוצאות צפויות:' if session['language'] == 'he' else 'Expected Expenses:' }}</strong> {{ campaign.expected_expenses }}</p>
+
+    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editCampaignModal">{{ 'ערוך קמפיין' if session['language'] == 'he' else 'Edit Campaign' }}</button>
+</div>
+
+<!-- Campaign Edit Modal -->
+<div class="modal fade" id="editCampaignModal" tabindex="-1" aria-labelledby="editCampaignModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="{{ url_for('edit_campaign', campaign_id=campaign.id) }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCampaignModalLabel">{{ 'ערוך קמפיין' if session['language'] == 'he' else 'Edit Campaign' }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="campaign_name" class="form-label">{{ 'שם הקמפיין' if session['language'] == 'he' else 'Campaign Name' }}</label>
+                        <input type="text" class="form-control" id="campaign_name" name="campaign_name" value="{{ campaign.name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="campaign_start_date" class="form-label">{{ 'תאריך התחלה' if session['language'] == 'he' else 'Start Date' }}</label>
+                        <input type="date" class="form-control" id="campaign_start_date" name="campaign_start_date" value="{{ campaign.start_date.strftime('%Y-%m-%d') }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="campaign_end_date" class="form-label">{{ 'תאריך סיום' if session['language'] == 'he' else 'End Date' }}</label>
+                        <input type="date" class="form-control" id="campaign_end_date" name="campaign_end_date" value="{{ campaign.end_date.strftime('%Y-%m-%d') }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="target_audience" class="form-label">{{ 'קהל יעד' if session['language'] == 'he' else 'Target Audience' }}</label>
+                        <input type="text" class="form-control" id="target_audience" name="target_audience" value="{{ campaign.target_audience }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="channels" class="form-label">{{ 'ערוצים' if session['language'] == 'he' else 'Channels' }}</label>
+                        <input type="text" class="form-control" id="channels" name="channels" value="{{ campaign.channels }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="budget" class="form-label">{{ 'תקציב' if session['language'] == 'he' else 'Budget' }}</label>
+                        <input type="number" step="0.01" class="form-control" id="budget" name="budget" value="{{ campaign.budget or 0 }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="actual_expenses" class="form-label">{{ 'הוצאות בפועל' if session['language'] == 'he' else 'Actual Expenses' }}</label>
+                        <input type="number" step="0.01" class="form-control" id="actual_expenses" name="actual_expenses" value="{{ campaign.actual_expenses or 0 }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="expected_expenses" class="form-label">{{ 'הוצאות צפויות' if session['language'] == 'he' else 'Expected Expenses' }}</label>
+                        <input type="number" step="0.01" class="form-control" id="expected_expenses" name="expected_expenses" value="{{ campaign.expected_expenses or 0 }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'סגור' if session['language'] == 'he' else 'Close' }}</button>
+                    <button type="submit" class="btn btn-primary">{{ 'שמור שינויים' if session['language'] == 'he' else 'Save changes' }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

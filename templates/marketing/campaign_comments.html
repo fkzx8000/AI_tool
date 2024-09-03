@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ campaign.name }} - {{ 'הערות' if session['language'] == 'he' else 'Comments' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ campaign.name }} - {{ 'הערות' if session['language'] == 'he' else 'Comments' }}</h1>
+
+    <!-- Comments Section -->
+    <h2>{{ 'הערות' if session['language'] == 'he' else 'Comments' }}</h2>
+    <ul class="list-group mb-3">
+        {% for comment in comments %}
+            <li class="list-group-item">
+                <strong>{{ comment.user.username }}:</strong> {{ comment.content }}
+                <br><small class="text-muted">{{ comment.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+            </li>
+        {% else %}
+            <li class="list-group-item">{{ 'אין הערות זמינות' if session['language'] == 'he' else 'No comments available' }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add Comment Form -->
+    <form method="post" class="mb-3">
+        <div class="mb-3">
+            <textarea class="form-control" name="comment" rows="3" placeholder="{{ 'הוסף הערה...' if session['language'] == 'he' else 'Add a comment...' }}" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'הוסף הערה' if session['language'] == 'he' else 'Add Comment' }}</button>
+    </form>
+
+    <a href="{{ url_for('marketing_home') }}" class="btn btn-secondary">{{ 'חזור לדף הבית' if session['language'] == 'he' else 'Back to Home' }}</a>
+</div>
+{% endblock %}

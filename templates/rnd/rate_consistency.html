@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'אחידות קוד דירוג' if session['language'] == 'he' else 'Rate Code Consistency' }}{% endblock %}
+
+{% block content %}
+<style>
+    .content-wrapper {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .code-editor-container, .result-container {
+        flex: 1;
+        height: 500px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow-y: auto;
+    }
+
+    .code-editor {
+        background-color: #2d2d2d; /* צבע רקע כהה */
+        border-radius: 4px;
+        padding: 10px;
+    }
+
+    .code-input {
+        font-family: 'Courier New', Courier, monospace; /* גופן מונוספייס לעורכי קוד */
+        color: #c5c8c6; /* צבע טקסט בהיר */
+        background-color: transparent;
+        border: none;
+        outline: none;
+        resize: none;
+        width: 100%;
+        height: 100%;
+    }
+
+    .code-input:focus {
+        color: #c5c8c6; /* שמירה על צבע טקסט בהיר */
+        background-color: transparent; /* שמירה על רקע כהה */
+        outline: none; /* הסרת קו מסביב כאשר בשדה */
+    }
+
+    .badge-success {
+        background-color: #5cb85c; /* צבע ירוק ל-Badge */
+    }
+
+    .bg-dark {
+        background-color: #343a40 !important; /* צבע רקע כהה */
+    }
+
+    .text-white-code {
+        color: #f8f9fa !important; /* צבע טקסט בהיר */
+    }
+
+    .rounded {
+        border-radius: 4px; /* קצוות מעוגלים */
+    }
+</style>
+
+<!--BSPMS2429-159 BSPMS2429-162-->
+
+<div class="content-wrapper">
+        <div class="code-editor-container">
+            <form method="POST">
+                <div class="mb-3">
+                    <div class="code-editor">
+                        <textarea class="form-control code-input" id="code_input" name="code_input" rows="10" required></textarea>
+                    </div>
+                </div>
+            <button type="submit" class="btn btn-outline-secondary btn-lg btn-block">{{ 'דרג אחידות' if session['language'] == 'he' else 'Rate Consistency' }}</button>
+        </form>
+    </div>
+
+
+    <div class="result-container">
+ <!-- BSPMS2429-162  -->
+        {% if score is defined %}
+        <h2>{{ 'דירוג האחידות שלך:' if session['language'] == 'he' else 'Your Consistency Rating:' }} <span class="badge badge-success">{{ score }}</span></h2>
+        <pre class="bg-dark text-white-code p-3 rounded">{{ feedback }}</pre>
+        {% endif %}
+            <!--BSPMS2429-162 -->
+
+        {% if team_average is not none %}
+        <h2 class="mt-4">{{ 'דירוג האחידות הממוצע של הצוות:' if session['language'] == 'he' else 'Team Average Consistency Rating:' }} <span class="badge badge-success">{{ team_average }}</span></h2>
+        {% endif %}
+        {% if updated_code is defined %}
+        <h3>{{ 'הקוד המעודכן:' if session['language'] == 'he' else 'Updated Code:' }}</h3>
+        <pre class="bg-dark text-white-code p-3 rounded">{{ updated_code }}</pre>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+<!-- templates/cto/home.html -->
+{% extends "base.html" %}
+
+{% block title %}{{ 'דף הבית של CTO' if session['language'] == 'he' else 'CTO Home' }}{% endblock %}
+
+{% block content %}
+    {% if team_data %}
+        {% for team in team_data %}
+<div class="card bg-light text-dark">
+    <div class="card-body">
+        <h3>{{ 'צוות:' if session['language'] == 'he' else 'Team:' }} {{ team.name }} - {{ 'ראש צוות:' if session['language'] == 'he' else 'Team Leader:' }} {{ team.leader.username }}</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{{ 'שם הפרויקט' if session['language'] == 'he' else 'Project Name' }}</th>
+                    <th>{{ 'תיאור' if session['language'] == 'he' else 'Description' }}</th>
+                    <th>{{ 'חברי צוות' if session['language'] == 'he' else 'Team Members' }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in team.projects %}
+                    <tr>
+                        <td>{{ project.name }}</td>
+                        <td>{{ project.description }}</td>
+                        <td>
+                            <ul>
+                                {% for member in project.team_members %}
+                                    <li>{{ member.username }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h4>{{ 'ציונים ממוצעים עבור צוות:' if session['language'] == 'he' else 'Average Scores for Team:' }} {{ team.name }}</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>{{ 'חבר צוות' if session['language'] == 'he' else 'Team Member' }}</th>
+                    <th>{{ 'ציון ממוצע' if session['language'] == 'he' else 'Average Score' }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in team.team_members %}
+                    <tr>
+                        <td>{{ member.username }}</td>
+                        <td>{{ member.average_score or 'N/A' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br></div>
+  </div>
+        {% endfor %}
+    {% else %}
+        <p>{{ 'לא נמצאו ראשי צוותים.' if session['language'] == 'he' else 'No team leaders found.' }}</p>
+    {% endif %}
+{% endblock %}

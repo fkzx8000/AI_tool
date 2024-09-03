@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'בית מנהל' if session['language'] == 'he' else 'Admin Home' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ 'ברוך הבא, מנהל' if session['language'] == 'he' else 'Welcome, Admin' }}</h1>
+    <h2 class="mt-4">{{ 'לוח בקרה למנהל' if session['language'] == 'he' else 'Admin Dashboard' }}</h2>
+
+    <!-- טבלה המציגה משתמשים לפי תפקיד -->
+    <h3>{{ 'משתמשים לפי תפקיד' if session['language'] == 'he' else 'Users by Role' }}</h3>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>{{ 'תפקיד' if session['language'] == 'he' else 'Role' }}</th>
+                <th>{{ 'שם משתמש' if session['language'] == 'he' else 'Username' }}</th>
+                <th>{{ 'צוות' if session['language'] == 'he' else 'Team' }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for role, role_users in users_by_role.items() %}
+                {% for user in role_users %}
+                <tr>
+                    {% if loop.first %}
+                    <td rowspan="{{ role_users|length }}">{{ role }}</td>
+                    {% endif %}
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.team.name if user.team else 'אין צוות' if session['language'] == 'he' else 'No Team' }}</td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- טבלה המציגה צוותים וחבריהם -->
+    <h3 class="mt-4">{{ 'צוותים' if session['language'] == 'he' else 'Teams' }}</h3>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>{{ 'צוות' if session['language'] == 'he' else 'Team' }}</th>
+                <th>{{ 'מנהל' if session['language'] == 'he' else 'Leader' }}</th>
+                <th>{{ 'חברים' if session['language'] == 'he' else 'Members' }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for team in teams %}
+            <tr>
+                <td>{{ team.name }}</td>
+                <td>{{ users_dict[team.leader_id].username if team.leader_id else 'אין מנהל' if session['language'] == 'he' else 'No Leader Assigned' }}</td>
+                <td>
+                    <ul class="list-unstyled mb-0">
+                        {% for user in team.rnds %}
+                        <li>{{ user.username }} - {{ user.role }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

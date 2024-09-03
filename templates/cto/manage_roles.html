@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'ניהול תפקידים' if session['language'] == 'he' else 'Manage Roles' }}{% endblock %}
+
+{% block content %}
+        <h1>{{ 'ניהול תפקידים' if session['language'] == 'he' else 'Manage Roles' }}</h1>
+        <!--BSPMS2429-90 \ BSPMS2429-92 -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ 'עדכן תפקיד משתמש' if session['language'] == 'he' else 'Update User Role' }}</h2>
+                        <form method="POST" action="{{ url_for('update_role') }}">
+                            <div class="mb-3">
+                                <label for="user_id" class="form-label">{{ 'משתמש:' if session['language'] == 'he' else 'User:' }}</label>
+                                <select class="form-control" id="user_id" name="user_id" required>
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}">{{ user.username }} ({{ user.role }}) {% if user.team %} - {{ 'צוות:' if session['language'] == 'he' else 'Team:' }} {{ user.team.name }}{% endif %}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="new_role" class="form-label">{{ 'תפקיד חדש:' if session['language'] == 'he' else 'New Role:' }}</label>
+                                <select class="form-control" id="new_role" name="new_role" required>
+                                    <option value="R&D">{{ 'מפתחים' if session['language'] == 'he' else 'R&D' }}</option>
+                                    <option value="TL">{{ 'מנהל צוות' if session['language'] == 'he' else 'TL' }}</option>
+                                    <option value="viewer">{{ 'צופה' if session['language'] == 'he' else 'Viewer' }}</option>
+                                </select>
+                            </div>
+                                <!--BSPMS2429-60 -->
+                            <div class="mb-3">
+                                <label for="team_id" class="form-label">{{ 'צוות (אופציונלי עבור מפתחים):' if session['language'] == 'he' else 'Team (optional for R&D):' }}</label>
+                                <select class="form-control" id="team_id" name="team_id">
+                                    <option value="">{{ 'ללא' if session['language'] == 'he' else 'None' }}</option>
+                                    {% for team in teams %}
+                                        <option value="{{ team.id }}">{{ team.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">{{ 'עדכן תפקיד' if session['language'] == 'he' else 'Update Role' }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                            <!--BSPMS2429-55-->
+                        <h2 class="card-title">{{ 'צור צוות' if session['language'] == 'he' else 'Create Team' }}</h2>
+                        <form method="POST" action="{{ url_for('create_team') }}">
+                            <div class="mb-3">
+                                <label for="team_name" class="form-label">{{ 'שם צוות:' if session['language'] == 'he' else 'Team Name:' }}</label>
+                                <input type="text" class="form-control" id="team_name" name="team_name" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">{{ 'צור צוות' if session['language'] == 'he' else 'Create Team' }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ 'הוסף משתמשים לצוות' if session['language'] == 'he' else 'Add Users to Team' }}</h2>
+                        <form method="POST" action="{{ url_for('add_user_to_team') }}">
+                            <div class="mb-3">
+                                <label for="team_id_add" class="form-label">{{ 'צוות:' if session['language'] == 'he' else 'Team:' }}</label>
+                                <select class="form-control" id="team_id_add" name="team_id_add" required>
+                                    {% for team in teams %}
+                                        <option value="{{ team.id }}">{{ team.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="user_id_add" class="form-label">{{ 'משתמש:' if session['language'] == 'he' else 'User:' }}</label>
+                                <select class="form-control" id="user_id_add" name="user_id_add" required>
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}">{{ user.username }} ({{ user.role }}) {% if user.team %} - {{ 'צוות:' if session['language'] == 'he' else 'Team:' }} {{ user.team.name }}{% endif %}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">{{ 'הוסף משתמש לצוות' if session['language'] == 'he' else 'Add User to Team' }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

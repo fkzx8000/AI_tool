@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'ערוך משימה' if session['language'] == 'he' else 'Edit Task' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ 'ערוך משימה:' if session['language'] == 'he' else 'Edit Task:' }} {{ task.name }}</h1>
+
+    <!-- Display flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {% for category, message in messages %}
+                    <strong>{{ message }}</strong>
+                {% endfor %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('edit_task', project_id=project.id, task_id=task.id) }}">
+        <div class="mb-3">
+            <label for="name" class="form-label">{{ 'שם משימה' if session['language'] == 'he' else 'Task Name' }}</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ task.name }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">{{ 'תיאור משימה' if session['language'] == 'he' else 'Task Description' }}</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required>{{ task.description }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="status" class="form-label">{{ 'סטטוס' if session['language'] == 'he' else 'Status' }}</label>
+            <select class="form-select" id="status" name="status">
+                <option value="open" {% if task.status == 'open' %}selected{% endif %}>{{ 'פתוח' if session['language'] == 'he' else 'Open' }}</option>
+                <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>{{ 'בתהליך' if session['language'] == 'he' else 'In Progress' }}</option>
+                <option value="closed" {% if task.status == 'closed' %}selected{% endif %}>{{ 'סגור' if session['language'] == 'he' else 'Closed' }}</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="assignee_id" class="form-label">{{ 'הקצה ל' if session['language'] == 'he' else 'Assign to' }}</label>
+            <select class="form-select" id="assignee_id" name="assignee_id">
+                <option value="">{{ 'בחר חבר צוות' if session['language'] == 'he' else 'Select a team member' }}</option>
+                {% for member in team_members %}
+                <option value="{{ member.id }}" {% if task.assignee_id == member.id %}selected{% endif %}>{{ member.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'שמור שינויים' if session['language'] == 'he' else 'Save Changes' }}</button>
+        <a href="{{ url_for('tl_home') }}" class="btn btn-secondary">{{ 'חזרה לדף הבית' if session['language'] == 'he' else 'Back to Home' }}</a>
+    </form>
+</div>
+{% endblock %}

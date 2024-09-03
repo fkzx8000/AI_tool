@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'בית R&D' if session['language'] == 'he' else 'R&D Home' }}{% endblock %}
+<!--BSPMS2429-197 -->
+{% block content %}
+    <!--BSPMS2429-190 ֿ BSPMS2429-192 -->
+    <h2>{{ 'הפרויקטים שלך' if session['language'] == 'he' else 'Your Projects' }}</h2>
+    <ul class="list-group">
+        {% for project in projects %}
+        <li class="list-group-item">
+            <strong>{{ project.name }}</strong> - {{ project.description }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2 class="mt-4">{{ 'חברי הצוות' if session['language'] == 'he' else 'Team Members' }}</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{ 'שם משתמש' if session['language'] == 'he' else 'Username' }}</th>
+                <th>{{ 'תפקיד' if session['language'] == 'he' else 'Role' }}</th>
+            </tr>
+        </thead>
+        <tbody> <!-- BSPMS2429-194 -->
+            {% for member in team_members %}
+            <tr>
+                <td>{{ member.username }}</td>
+                <td>{{ member.role }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2 class="mt-4">{{ 'המשימות שלך' if session['language'] == 'he' else 'Your Tasks' }}</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{ 'משימה' if session['language'] == 'he' else 'Task' }}</th>
+                <th>{{ 'תיאור' if session['language'] == 'he' else 'Description' }}</th>
+                <th>{{ 'סטטוס' if session['language'] == 'he' else 'Status' }}</th>
+                <th>{{ 'פעולות' if session['language'] == 'he' else 'Actions' }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.name }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.status }}</td>
+                <td>
+                    <!-- BSPMS2429-187 - BSPMS2429-184-->
+                    <form method="POST" action="{{ url_for('toggle_task_status', task_id=task.id) }}" class="d-inline">
+                        <button type="submit" class="btn btn-{{ 'danger' if task.status == 'open' else 'success' }}">
+                            {{ 'סגור' if session['language'] == 'he' else 'Close' if task.status == 'open' else 'פתח' if session['language'] == 'he' else 'Open' }}
+                        </button>
+                    </form>
+                    <form method="GET" action="{{ url_for('return_task', task_id=task.id) }}" class="d-inline">
+                        <button type="submit" class="btn btn-warning">{{ 'החזר משימה' if session['language'] == 'he' else 'Return Task' }}</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2 class="mt-4">{{ 'צאט' if session['language'] == 'he' else 'Chat' }}</h2>
+    <a href="{{ url_for('chat') }}" class="btn btn-outline-primary">{{ 'לך לצאט' if session['language'] == 'he' else 'Go to Chat' }}</a>
+
+{% endblock %}

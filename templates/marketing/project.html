@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.name }} - {{ 'פרטי הפרויקט' if session['language'] == 'he' else 'Project Details' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4" dir="{{ 'rtl' if session['language'] == 'he' else 'ltr' }}">
+    <h1>{{ project.name }} - {{ 'פרטי הפרויקט' if session['language'] == 'he' else 'Project Details' }}</h1>
+    <p><strong>{{ 'לקוח:' if session['language'] == 'he' else 'Client:' }}</strong> {{ project.client.name }}</p>
+    <p><strong>{{ 'יוצר:' if session['language'] == 'he' else 'Creator:' }}</strong> {{ project.creator.username }}</p>
+    <p><strong>{{ 'תאריך התחלה:' if session['language'] == 'he' else 'Start Date:' }}</strong> {{ project.start_date.strftime('%Y-%m-%d') }}</p>
+    <p><strong>{{ 'תאריך סיום:' if session['language'] == 'he' else 'End Date:' }}</strong> {{ project.end_date.strftime('%Y-%m-%d') }}</p>
+    <p><strong>{{ 'מטרות:' if session['language'] == 'he' else 'Objectives:' }}</strong> {{ project.objectives }}</p>
+    <p><strong>{{ 'קישור לגוגל דרייב:' if session['language'] == 'he' else 'Google Drive Link:' }}</strong> <a href="{{ project.google_drive_link }}" target="_blank">{{ project.google_drive_link }}</a></p>
+
+    <!-- Comments Section -->
+    <h2>{{ 'הערות' if session['language'] == 'he' else 'Comments' }}</h2>
+    <ul class="list-group mb-3">
+        {% for comment in comments %}
+            <li class="list-group-item">
+                <strong>{{ comment.user.username }}:</strong> {{ comment.content }}
+                <br><small class="text-muted">{{ comment.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add Comment Form -->
+    <form method="post" class="mb-3">
+        <div class="mb-3">
+            <textarea class="form-control" name="comment" rows="3" placeholder="{{ 'הוסף תגובה...' if session['language'] == 'he' else 'Add a comment...' }}" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'הוסף תגובה' if session['language'] == 'he' else 'Add Comment' }}</button>
+    </form>
+
+    <!-- Project Actions -->
+    <div class="mt-4">
+        <a href="{{ url_for('modify_project', project_id=project.id) }}" class="btn btn-secondary">{{ 'ערוך פרויקט' if session['language'] == 'he' else 'Edit Project' }}</a>
+        <form method="post" action="{{ url_for('delete_project', project_id=project.id) }}" style="display:inline;">
+            <button type="submit" class="btn btn-danger">{{ 'מחק פרויקט' if session['language'] == 'he' else 'Delete Project' }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

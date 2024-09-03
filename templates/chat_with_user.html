@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'צ׳אט עם' if session['language'] == 'he' else 'Chat with' }} {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">{{ 'צ׳אט עם' if session['language'] == 'he' else 'Chat with' }} {{ user.username }}</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="chat-box border rounded p-3 mb-3" id="chat-box">
+                {% for message in messages %}
+                <div class="message {% if message.sender_id == current_user.id %}sent{% else %}received{% endif %} mb-2">
+                    <p class="mb-1">{{ message.message }}</p>
+                    <span class="timestamp text-muted" style="font-size: 0.8rem;">{{ message.timestamp }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <form action="{{ url_for('chat_with_user', user_id=user.id) }}" method="post" class="mb-3">
+                <div class="form-group">
+                    <label for="message" class="form-label">{{ 'הודעה:' if session['language'] == 'he' else 'Message:' }}</label>
+                    <textarea name="message" id="message" rows="3" required class="form-control"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2 w-100">{{ 'שלח הודעה' if session['language'] == 'he' else 'Send Message' }}</button>
+            </form>
+            <form action="{{ url_for('chat_with_user', user_id=user.id) }}" method="post" class="mb-3">
+                <input type="hidden" name="clear_chat" value="1">
+                <button type="submit" class="btn btn-danger w-100">{{ 'נקה צ׳אט' if session['language'] == 'he' else 'Clear Chat' }}</button>
+            </form>
+            <a href="{{ url_for('chat') }}" class="btn btn-secondary w-100">{{ 'חזרה לרשימת צ׳אט' if session['language'] == 'he' else 'Back to chat list' }}</a>
+        </div>
+    </div>
+</div>
+
+<!-- CSS for chat styling -->
+<style>
+    .chat-box {
+        height: 500px;
+        overflow-y: auto;
+        background-color: #f8f9fa;
+    }
+    .message.sent {
+        background-color: #d1e7dd;
+        border-radius: 15px;
+        padding: 10px;
+        margin-left: auto;
+        max-width: 70%;
+    }
+    .message.received {
+        background-color: #e9ecef;
+        border-radius: 15px;
+        padding: 10px;
+        margin-right: auto;
+        max-width: 70%;
+    }
+</style>
+{% endblock %}

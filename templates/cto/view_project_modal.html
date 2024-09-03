@@ -1,0 +1,22 @@
+<div class="container">
+    <h3>{{ project.name }}</h3>
+    <p><strong>{{ 'תיאור:' if session['language'] == 'he' else 'Description:' }}</strong> {{ project.description }}</p>
+    <p><strong>{{ 'מנהל צוות:' if session['language'] == 'he' else 'Team Leader:' }}</strong> {{ team_leader.username }}</p>
+    <p><strong>{{ 'משימות פתוחות:' if session['language'] == 'he' else 'Open Tasks:' }}</strong> {{ open_tasks|length }}</p>
+    <p><strong>{{ 'משימות סגורות:' if session['language'] == 'he' else 'Closed Tasks:' }}</strong> {{ closed_tasks|length }}</p>
+    <p><strong>{{ 'ציון ממוצע של הצוות:' if session['language'] == 'he' else 'Average Team Score:' }}</strong> {{ average_score|round(2) }}</p>
+    <!-- #BSPMS2429-74 #BSPMS2429-77 -->
+    <h4>{{ 'משימות פתוחות' if session['language'] == 'he' else 'Open Tasks' }}</h4>
+    <ul>
+        {% for task in open_tasks %}
+        <li>{{ task.name }} - {{ task.description }} ({{ task.assignee.username if task.assignee else ('לא משובץ' if session['language'] == 'he' else 'Unassigned') }})</li>
+        {% endfor %}
+    </ul>
+
+    <h4>{{ 'משימות סגורות' if session['language'] == 'he' else 'Closed Tasks' }}</h4>
+    <ul>
+        {% for task in closed_tasks %}
+        <li>{{ task.name }} - {{ task.description }} ({{ task.assignee.username if task.assignee else ('לא משובץ' if session['language'] == 'he' else 'Unassigned') }})</li>
+        {% endfor %}
+    </ul>
+</div>

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'ניהול פרויקט' if session['language'] == 'he' else 'Manage Project' }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ 'ניהול פרויקט:' if session['language'] == 'he' else 'Manage Project:' }} {{ project.name }}</h1>
+
+    <div class="row">
+        <!-- Project Details Card -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ 'פרטי פרויקט' if session['language'] == 'he' else 'Project Details' }}</h2>
+                    <p><strong>{{ 'תיאור:' if session['language'] == 'he' else 'Description:' }}</strong> {{ project.description }}</p>
+                    <a href="{{ url_for('edit_project_description', project_id=project.id) }}" class="btn btn-warning mt-2 mb-4">{{ 'ערוך תיאור' if session['language'] == 'he' else 'Edit Description' }}</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Members Card -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ 'חברי צוות' if session['language'] == 'he' else 'Team Members' }}</h2>
+                    <ul>
+                        {% for member in project.team_members %}
+                        <li>
+                            {{ member.username }}
+                            <form method="post" action="{{ url_for('remove_member', project_id=project.id, member_id=member.id) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">{{ 'הסר' if session['language'] == 'he' else 'Remove' }}</button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <h3>{{ 'הוסף חבר צוות' if session['language'] == 'he' else 'Add Team Member' }}</h3>
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="member_id" class="form-label">{{ 'בחר חבר' if session['language'] == 'he' else 'Select Member' }}</label>
+                            <select class="form-select" id="member_id" name="member_id">
+                                <option value="">{{ 'בחר...' if session['language'] == 'he' else 'Select...' }}</option>
+                                {% for member in team_members %}
+                                <option value="{{ member.id }}">{{ member.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">{{ 'הוסף חבר' if session['language'] == 'he' else 'Add Member' }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Card -->
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ 'משימות' if session['language'] == 'he' else 'Tasks' }}</h2>
+                    <ul>
+                        {% for task in tasks %}
+                        <li>
+                            <a href="{{ url_for('edit_task', project_id=project.id, task_id=task.id) }}">{{ task.name }}</a> - {{ task.status }}
+                            {% if task.assignee %}
+                            ({{ 'משויך ל:' if session['language'] == 'he' else 'Assigned to:' }} {{ task.assignee.username }})
+                            {% else %}
+                            ({{ 'לא משויך' if session['language'] == 'he' else 'Not assigned' }})
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{{ url_for('add_task', project_id=project.id) }}" class="btn btn-primary mt-3">{{ 'הוסף משימה' if session['language'] == 'he' else 'Add Task' }}</a>
+                    <a href="{{ url_for('project_logs', project_id=project.id) }}" class="btn btn-info mt-3">{{ 'צפה בלוגים' if session['language'] == 'he' else 'View Logs' }}</a>
+                    <a href="{{ url_for('tl_home') }}" class="btn btn-secondary mt-3">{{ 'חזרה לדף הבית' if session['language'] == 'he' else 'Back to Home' }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
